@@ -136,9 +136,9 @@
             }
 
             // Convert pixel to world coordinates
-            // Image Y axis is inverted relative to world Z
-            const worldX = Math.floor(worldBounds.originX + pixelX);
-            const worldZ = Math.floor(worldBounds.originZ - pixelY);
+            // Each pixel = 1 block, pixel boundaries = block boundaries
+            const worldX = worldBounds.originX + pixelX;
+            const worldZ = worldBounds.originZ - pixelY;
 
             document.getElementById('coord-x').textContent = worldX;
             document.getElementById('coord-z').textContent = worldZ;
