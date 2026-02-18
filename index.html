@@ -122,8 +122,8 @@
             const imgWidth = worldBounds.imageWidth;
             const imgHeight = worldBounds.imageHeight;
 
-            const pixelX = Math.round(e.latlng.lng);
-            const pixelY = Math.round(e.latlng.lat);
+            const pixelX = Math.floor(e.latlng.lng);
+            const pixelY = Math.floor(e.latlng.lat);
 
             // Show pixel coords for debugging
             document.getElementById('coord-pixel').textContent = `${pixelX}, ${pixelY}`;
