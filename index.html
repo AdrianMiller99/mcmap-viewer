@@ -21,8 +21,16 @@
             border-radius: 8px;
             z-index: 1000;
             font-size: 14px;
+            min-width: 180px;
         }
         #info small { color: #888; }
+        #coords {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: #4ade80;
+            margin-top: 5px;
+        }
+        #coords .dim { color: #888; font-size: 11px; }
         #container {
             width: 100vw;
             height: 100vh;
@@ -34,19 +42,30 @@
         .leaflet-container {
             background: #1a1a2e;
         }
+        .crosshair {
+            cursor: crosshair !important;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
     <div id="info">
         <strong>🗺️ Minecraft Map</strong><br>
-        <small>Scroll to zoom • drag to pan</small><br>
+        <small>scroll to zoom • drag to pan</small><br>
         <small id="timestamp">Loading...</small>
+        <div id="coords" style="display:none;">
+            <span class="dim">X:</span> <span id="coord-x">-</span>
+            <span class="dim">Z:</span> <span id="coord-z">-</span>
+        </div>
     </div>
     <div id="container"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        let worldBounds = null;
+        let imageOverlay = null;
+
+        // Fetch map metadata
         fetch('map.png', { method: 'HEAD' })
             .then(r => {
                 const lastMod = r.headers.get('Last-Modified');
@@ -55,6 +74,16 @@
             })
             .catch(() => {});
 
+        // Fetch world bounds
+        fetch('bounds.json')
+            .then(r => r.json())
+            .then(data => {
+                worldBounds = data;
+                document.getElementById('coords').style.display = 'block';
+            })
+            .catch(() => console.log('No bounds.json found'));
+
+        // Initialize Leaflet with pixel-perfect rendering
         const map = L.map('container', {
             crs: L.CRS.Simple,
             minZoom: -4,
@@ -62,21 +91,64 @@
             zoomControl: true
         });
 
+        // Load the map image
         const img = new Image();
         img.onload = function() {
             const width = this.naturalWidth;
             const height = this.naturalHeight;
+            
             const bounds = [[0, 0], [height, width]];
-            const overlay = L.imageOverlay('map.png', bounds, {
+            
+            imageOverlay = L.imageOverlay('map.png', bounds, {
                 interactive: true,
                 attribution: 'Minecraft World Map'
             });
             
-            overlay.addTo(map);
+            imageOverlay.addTo(map);
             map.fitBounds(bounds);
-            overlay.getElement().style.imageRendering = 'pixelated';
+            
+            // Force pixelated rendering
+            imageOverlay.getElement().style.imageRendering = 'pixelated';
+            imageOverlay.getElement().classList.add('crosshair');
         };
         img.src = 'map.png';
+
+        // Mouse move handler for coordinates
+        map.on('mousemove', function(e) {
+            if (!worldBounds || !imageOverlay) return;
+
+            const imgBounds = imageOverlay.getBounds();
+            const imgWidth = worldBounds.imageWidth;
+            const imgHeight = worldBounds.imageHeight;
+
+            // e.latlng is in image coordinates (y is inverted in Leaflet)
+            // lat = y (0 at top, height at bottom)
+            // lng = x (0 at left, width at right)
+            const pixelX = e.latlng.lng;
+            const pixelY = e.latlng.lat;
+
+            // Check if mouse is over the image
+            if (pixelX < 0 || pixelX > imgWidth || pixelY < 0 || pixelY > imgHeight) {
+                document.getElementById('coord-x').textContent = '-';
+                document.getElementById('coord-z').textContent = '-';
+                return;
+            }
+
+            // Convert pixel to world coordinates
+            // Each pixel = 1 block (at scale 1)
+            // Pixel (0,0) = world (minX, minZ)
+            const worldX = Math.floor(worldBounds.minX + pixelX);
+            const worldZ = Math.floor(worldBounds.minZ + pixelY);
+
+            document.getElementById('coord-x').textContent = worldX;
+            document.getElementById('coord-z').textContent = worldZ;
+        });
+
+        // Clear coords when mouse leaves map
+        map.on('mouseout', function() {
+            document.getElementById('coord-x').textContent = '-';
+            document.getElementById('coord-z').textContent = '-';
+        });
     </script>
 </body>
 </html>
