@@ -1,9 +1,7 @@
 {
-  "minX": -1904,
-  "minZ": -640,
-  "maxX": 479,
-  "maxZ": 1215,
+  "originX": -880,
+  "originZ": 703,
   "imageWidth": 1360,
   "imageHeight": 816,
-  "updatedAt": "2026-02-18T02:37:25Z"
+  "updatedAt": "2026-02-18T03:05:00Z"
 }
