@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft World Map</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a2e;
+            color: #eee;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 1000;
+            font-size: 14px;
+        }
+        #info small { color: #888; }
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+        /* Pixel-perfect rendering */
+        img, canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+        .leaflet-container {
+            background: #1a1a2e;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div id="info">
+        <strong>🗺️ Minecraft Map</strong><br>
+        <small>Scroll to zoom • drag to pan</small><br>
+        <small id="timestamp">Loading...</small>
+    </div>
+    <div id="container"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Fetch map metadata
+        fetch('map.png', { method: 'HEAD' })
+            .then(r => {
+                const lastMod = r.headers.get('Last-Modified');
+                document.getElementById('timestamp').textContent = 
+                    lastMod ? `Updated: ${new Date(lastMod).toLocaleString()}` : '';
+            })
+            .catch(() => {});
+
+        // Initialize Leaflet with pixel-perfect rendering
+        const map = L.map('container', {
+            crs: L.CRS.Simple,
+            minZoom: -4,
+            maxZoom: 4,
+            zoomControl: true
+        });
+
+        // Load the map image
+        const img = new Image();
+        img.onload = function() {
+            const width = this.naturalWidth;
+            const height = this.naturalHeight;
+            
+            // Calculate bounds (Minecraft coords: 1 block = 1 pixel)
+            const bounds = [[0, 0], [height, width]];
+            
+            // Create image overlay with pixel-perfect rendering
+            const overlay = L.imageOverlay('map.png', bounds, {
+                interactive: true,
+                attribution: 'Minecraft World Map'
+            });
+            
+            overlay.addTo(map);
+            map.fitBounds(bounds);
+            
+            // Force pixelated rendering on the image element
+            overlay.getElement().style.imageRendering = 'pixelated';
+        };
+        img.src = 'map.png';
+
+        // Add zoom controls info
+        map.on('zoomend', () => {
+            const z = map.getZoom();
+            console.log(`Zoom level: ${z}`);
+        });
+    </script>
+</body>
+</html>
