@@ -1,22 +1,22 @@
 {
-  "originX": -879.5,
-  "originZ": 703.5,
+  "originX": -880,
+  "originZ": 703,
   "imageWidth": 1360,
   "imageHeight": 816,
-  "calibratedAt": "2026-02-18T03:25:00Z",
+  "calibratedAt": "2026-02-18T03:55:00Z",
   "points": [
-    {
-      "pixelX": 1151,
-      "pixelY": 234,
-      "worldX": 271,
-      "worldZ": 469
-    },
     {
       "pixelX": 905,
       "pixelY": 391,
       "worldX": 25,
       "worldZ": 312
+    },
+    {
+      "pixelX": 1151,
+      "pixelY": 234,
+      "worldX": 271,
+      "worldZ": 469
     }
   ],
-  "updatedAt": "2026-02-18T03:25:10Z"
+  "updatedAt": "2026-02-18T03:55:07Z"
 }
