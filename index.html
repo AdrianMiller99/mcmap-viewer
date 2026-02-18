@@ -136,9 +136,11 @@
             }
 
             // Convert pixel to world coordinates
-            // Scale: number of pixels per block (usually 1 or 2)
-            const scale = worldBounds.scale || 2;
-            const worldX = Math.floor((pixelX + worldBounds.originX) / scale);
+            // Scale: number of image pixels per block
+            const scale = worldBounds.scale || 1;
+            // For scale=1: worldX = originX + pixelX
+            // For scale=2: worldX = floor((originX + pixelX) / 2)
+            const worldX = Math.floor((worldBounds.originX + pixelX) / scale);
             const worldZ = Math.floor((worldBounds.originZ - pixelY) / scale);
 
             document.getElementById('coord-x').textContent = worldX;
