@@ -1,9 +1,10 @@
 {
+  "scale": 1,
   "originX": -880,
   "originZ": 703,
   "imageWidth": 1360,
   "imageHeight": 816,
-  "calibratedAt": "2026-02-18T03:55:00Z",
+  "calibratedAt": "2026-02-18T04:05:00Z",
   "points": [
     {
       "pixelX": 905,
@@ -18,5 +19,5 @@
       "worldZ": 469
     }
   ],
-  "updatedAt": "2026-02-18T03:55:07Z"
+  "updatedAt": "2026-02-18T04:06:18Z"
 }
