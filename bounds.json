@@ -4,20 +4,6 @@
   "originZ": 703,
   "imageWidth": 1360,
   "imageHeight": 816,
-  "calibratedAt": "2026-02-18T04:05:00Z",
-  "points": [
-    {
-      "pixelX": 905,
-      "pixelY": 391,
-      "worldX": 25,
-      "worldZ": 312
-    },
-    {
-      "pixelX": 1151,
-      "pixelY": 234,
-      "worldX": 271,
-      "worldZ": 469
-    }
-  ],
-  "updatedAt": "2026-02-18T04:06:18Z"
+  "calibratedAt": "2026-02-18T04:20:00Z",
+  "updatedAt": "2026-02-18T04:19:18Z"
 }
