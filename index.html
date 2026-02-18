@@ -15,7 +15,7 @@
         #info {
             position: fixed;
             top: 10px;
-            left: 10px;
+            right: 10px;
             background: rgba(0,0,0,0.7);
             padding: 10px 15px;
             border-radius: 8px;
@@ -27,7 +27,6 @@
             width: 100vw;
             height: 100vh;
         }
-        /* Pixel-perfect rendering */
         img, canvas {
             image-rendering: pixelated;
             image-rendering: crisp-edges;
@@ -48,7 +47,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Fetch map metadata
         fetch('map.png', { method: 'HEAD' })
             .then(r => {
                 const lastMod = r.headers.get('Last-Modified');
@@ -57,7 +55,6 @@
             })
             .catch(() => {});
 
-        // Initialize Leaflet with pixel-perfect rendering
         const map = L.map('container', {
             crs: L.CRS.Simple,
             minZoom: -4,
@@ -65,16 +62,11 @@
             zoomControl: true
         });
 
-        // Load the map image
         const img = new Image();
         img.onload = function() {
             const width = this.naturalWidth;
             const height = this.naturalHeight;
-            
-            // Calculate bounds (Minecraft coords: 1 block = 1 pixel)
             const bounds = [[0, 0], [height, width]];
-            
-            // Create image overlay with pixel-perfect rendering
             const overlay = L.imageOverlay('map.png', bounds, {
                 interactive: true,
                 attribution: 'Minecraft World Map'
@@ -82,17 +74,9 @@
             
             overlay.addTo(map);
             map.fitBounds(bounds);
-            
-            // Force pixelated rendering on the image element
             overlay.getElement().style.imageRendering = 'pixelated';
         };
         img.src = 'map.png';
-
-        // Add zoom controls info
-        map.on('zoomend', () => {
-            const z = map.getZoom();
-            console.log(`Zoom level: ${z}`);
-        });
     </script>
 </body>
 </html>
