@@ -1,7 +1,22 @@
 {
-  "originX": -1904.5,
-  "originZ": 1216.5,
+  "originX": -879.5,
+  "originZ": 703.5,
   "imageWidth": 1360,
   "imageHeight": 816,
-  "updatedAt": "2026-02-18T03:21:32Z"
+  "calibratedAt": "2026-02-18T03:25:00Z",
+  "points": [
+    {
+      "pixelX": 1151,
+      "pixelY": 234,
+      "worldX": 271,
+      "worldZ": 469
+    },
+    {
+      "pixelX": 905,
+      "pixelY": 391,
+      "worldX": 25,
+      "worldZ": 312
+    }
+  ],
+  "updatedAt": "2026-02-18T03:25:10Z"
 }
